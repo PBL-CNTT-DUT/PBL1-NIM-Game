@@ -19,7 +19,7 @@ struct GameState {
 
 
 // khởi tạo game
-void init_game (GameState& game, int pileCount, const MatchConfig& matchConfig, const GameSettings& settings);
+void init_game (GameState& game, int pileCount, const MatchConfig& matchConfig, const GameSettings& settings, int startingTurn);
 // giải phóng dung lượng game.piles
 void free_game (GameState& game);
 

@@ -11,5 +11,5 @@ void screen_play_shutdown();
 const char* screen_play_get_actor_name(int actorIndex);
 int screen_play_get_score(int actorIndex);
 
-void screen_play_update(GameAppState& app, float dt);
-void screen_play_draw();
+void screen_play_update(GameAppState& app);
+void screen_play_draw(const GameAppState& app);

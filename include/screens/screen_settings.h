@@ -2,5 +2,5 @@
 
 struct GameAppState;
 
-void screen_settings_update(GameAppState& app, float dt);
-void screen_settings_draw();
+void screen_settings_update(GameAppState& app);
+void screen_settings_draw(const GameAppState& app);

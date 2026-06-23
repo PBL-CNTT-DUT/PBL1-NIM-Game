@@ -22,7 +22,9 @@ void ui_button_reset_active();
 
 UIButtonState ui_button_get_state(int buttonId, Rectangle rect);
 bool ui_button_is_clicked(int buttonId, Rectangle rect);
+bool ui_button_has_any_textures(const UIButtonStateTextures& textures);
 
 void ui_button_draw(Rectangle rect, const UIButtonStyle& style, UIButtonState state);
 void ui_button_draw_state_textures(Rectangle rect, const UIButtonStateTextures& textures, UIButtonState state, bool isSelected = false);
+void ui_button_draw_state_textures_tinted(Rectangle rect, const UIButtonStateTextures& textures, UIButtonState state, bool isSelected = false, Color selectedTint = WHITE);
 void ui_button_draw_text(Rectangle rect, const char* text, Font font, float fontSize, UIButtonState state, Color normal, Color hover, Color pressed);

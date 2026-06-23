@@ -7,8 +7,8 @@
 #include "overlays/overlay_common.h"
 #include "raylib.h"
 #include "render/theme.h"
-#include "screens/screen_play.h"
-#include "ui/ui_text.h"
+#include "screens/screens.h"
+#include "ui/ui.h"
 
 namespace {
     constexpr int BTN_CONTINUE_ID = 1;
@@ -17,16 +17,9 @@ namespace {
     Rectangle BTN_CONTINUE = {336, 458, 248, 68};
     Rectangle BTN_MENU = {696, 458, 248, 68};
 
-    const UIButtonStyle BTN_STYLE = {
-        Color{75, 110, 175, 255},
-        Color{95, 130, 195, 255},
-        Color{60, 90, 150, 255},
-        Color{20, 24, 36, 255}
-    };
 }
 
-void overlay_result_update(GameAppState& app, float dt) {
-    (void)dt;
+void overlay_result_update(GameAppState& app) {
 
     if (ui_button_is_clicked(BTN_CONTINUE_ID, BTN_CONTINUE) || IsKeyPressed(KEY_ENTER)) {
         screen_play_continue_match();
@@ -47,7 +40,7 @@ void overlay_result_draw(const GameAppState& app) {
     overlay_draw_backdrop(0.68f);
 
     Rectangle panel = {230, 148, 820, 438};
-    overlay_draw_panel(panel, Color{18, 24, 40, 245}, theme_accent_color());
+    overlay_draw_panel(panel, ui_color_overlay_panel_fill(), THEME_ACCENT_COLOR);
 
     ui_draw_text_in_rect_with_outline(
         g_assets.fonts.common,
@@ -58,7 +51,7 @@ void overlay_result_draw(const GameAppState& app) {
         0.5f,
         0.5f,
         2.0f,
-        theme_accent_color(),
+        THEME_ACCENT_COLOR,
         BLACK
     );
 
@@ -74,7 +67,7 @@ void overlay_result_draw(const GameAppState& app) {
         1.0f,
         0.5f,
         0.5f,
-        theme_text_color()
+        THEME_TEXT_COLOR
     );
 
     char scoreLine[160];
@@ -97,7 +90,7 @@ void overlay_result_draw(const GameAppState& app) {
         0.5f,
         0.5f,
         1.5f,
-        Color{255, 222, 126, 255},
+        THEME_ACCENT_COLOR,
         BLACK
     );
 
@@ -109,30 +102,20 @@ void overlay_result_draw(const GameAppState& app) {
         1.0f,
         0.5f,
         0.5f,
-        Color{216, 228, 246, 255}
+        UI_COLOR_TEXT_MUTED
     );
 
     overlay_draw_button(
         BTN_CONTINUE_ID,
         BTN_CONTINUE,
         u8"CHƠI TIẾP",
-        g_assets.fonts.common,
-        24.0f,
-        BTN_STYLE,
-        DARKGRAY,
-        BLACK,
-        WHITE
+        24.0f
     );
 
     overlay_draw_button(
         BTN_MENU_ID,
         BTN_MENU,
         u8"VỀ MENU CHÍNH",
-        g_assets.fonts.common,
-        24.0f,
-        BTN_STYLE,
-        DARKGRAY,
-        BLACK,
-        WHITE
+        24.0f
     );
 }

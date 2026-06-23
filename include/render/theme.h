@@ -2,6 +2,6 @@
 
 #include "raylib.h"
 
-Color theme_bg_color();
-Color theme_text_color();
-Color theme_accent_color();
+inline const Color THEME_BG_COLOR = BLACK;
+inline const Color THEME_TEXT_COLOR = RAYWHITE;
+inline const Color THEME_ACCENT_COLOR = GOLD;

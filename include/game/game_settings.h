@@ -1,14 +1,14 @@
 #pragma once
 
+enum GameRule {
+    GAME_RULE_LAST_TAKE_LOSE = 0,
+    GAME_RULE_LAST_TAKE_WIN,
+};
+
 enum GameMode {
     GAME_MODE_PVP = 0,
     GAME_MODE_PVAI,
     GAME_MODE_AIVAI,
-};
-
-enum GameRule {
-    GAME_RULE_LAST_TAKE_LOSE = 0,
-    GAME_RULE_LAST_TAKE_WIN,
 };
 
 enum PlayerType {

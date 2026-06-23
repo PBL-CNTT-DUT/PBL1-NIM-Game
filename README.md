@@ -14,14 +14,18 @@ NIM là trò chơi chiến thuật toán học cổ điển:
 
 ## Tính năng
 
-- **3 chế độ chơi**: Người vs Người (PvP), Người vs AI (PvAI), AI vs AI
+- **2 chế độ chơi**: Người vs Người (PvP), Người vs AI (PvAI)
 - **AI với 5 mức độ khó**: Very Easy → Easy → Medium → Hard → Very Hard
 - **Tùy chỉnh luật chơi**:
   - Luật người lấy cuối thua / thắng
   - Giới hạn số đá được lấy mỗi lượt
-  - Tùy chỉnh số đống đá và số đá mỗi đống
+  - Tùy chỉnh số đống
 - **Giao diện đồ họa** với Raylib (1280x720)
+  - Đám mây tương tác: hover theo vùng bốc (từ đầu đến vị trí chọn)
+  - Animation đám mây bay khi bốc
 - **Nhạc nền & hiệu ứng âm thanh**
+  - Nút bật/tắt Sound và Music ngay trong màn chơi
+- **Hệ thống gợi ý nước đi** (Hint) cho người chơi
 - **Hệ thống màn hình đầy đủ**:
   - Main Menu, Match Setup, Gameplay
   - Settings, Help, Credits
@@ -105,11 +109,14 @@ nim-game.exe
 
 ## Cách chơi
 
-1. Chọn **chế độ chơi** (PvP / PvAI / AI vs AI)
+1. Chọn **chế độ chơi** (PvP / PvAI)
 2. Cấu hình **độ khó AI** và **tên người chơi**
-3. Thiết lập **số đống đá** và **luật chơi**
-4. Bắt đầu chơi: chọn đống đá → chọn số đá muốn lấy
-5. Người lấy viên đá cuối cùng sẽ thua (hoặc thắng tùy luật)
+3. Thiết lập **số đống** và **luật chơi**
+4. Bắt đầu chơi:
+   - Di chuột vào đám mây → toàn bộ đám mây từ đầu đến vị trí đó sáng lên (đây là số sẽ bốc)
+   - Click vào đám mây để chọn số lượng muốn bốc
+   - Nhấn **Enter** hoặc nút **Đồng ý** để xác nhận
+5. Người lấy viên đá cuối cùng sẽ **thua** (hoặc **thắng** tùy luật đã chọn)
 
 ## Công nghệ sử dụng
 
@@ -124,10 +131,10 @@ nim-game.exe
 
 <!-- Thêm thông tin thành viên tại đây -->
 
-| STT |Họ và tên|   MSSV   |
-|-----|---------|----------|
-| 1   |Tạ Anh Tuấn|          |
-| 2   |Tôn Nguyễn Khánh Huyền|          |
+| STT | Họ và tên | Lớp | MSSV |
+|-----|-----------|-----|------|
+| 1 | Tạ Anh Tuấn | 25T_DT1 | |
+| 2 | Tôn Nguyễn Khánh Huyền | 25T_DT4 | |
 
 ## License
 

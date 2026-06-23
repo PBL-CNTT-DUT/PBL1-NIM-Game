@@ -1,5 +1,6 @@
 #include "audio/audio_manager.h"
 
+#include "assets/game_assets.h"
 #include "raylib.h"
 
 void audio_manager_init() {
@@ -8,8 +9,10 @@ void audio_manager_init() {
     }
 }
 
-void audio_manager_update(float dt) {
-    (void)dt;
+void audio_manager_update() {
+    if (IsAudioDeviceReady() && g_assets.musics.bgm.frameCount > 0) {
+        UpdateMusicStream(g_assets.musics.bgm);
+    }
 }
 
 void audio_manager_shutdown() {

@@ -2,6 +2,7 @@
 
 #include <cstdio>
 
+#include "assets/game_assets.h"
 #include "overlays/overlays.h"
 #include "screens/screens.h"
 #include "ui/ui.h"
@@ -19,6 +20,10 @@ namespace {
         return _max_int(minValue, _min_int(value, maxValue));
     }
 
+    float _volume_percent_to_float(int percent) {
+        return (float)_clamp_int(percent, 0, 100) / 100.0f;
+    }
+
     int _default_match_pile_count(const GameSettings& settings) {
         const int minPileCount = _max_int(1, settings.minPileCount);
         const int maxPileCount = _max_int(minPileCount, settings.maxPileCount);
@@ -33,14 +38,14 @@ namespace {
         return _max_int(1, _min_int(3, _max_int(1, settings.maxInitialStoneCount)));
     }
 
-    void _update_current_screen(GameAppState& app, float dt) {
+    void _update_current_screen(GameAppState& app) {
         switch (app.currentScreen) {
-            case APP_SCREEN_MAIN_MENU:   screen_main_menu_update(app, dt); break;
-            case APP_SCREEN_MATCH_SETUP: screen_match_setup_update(app, dt); break;
-            case APP_SCREEN_HELP:        screen_help_update(app, dt); break;
-            case APP_SCREEN_CREDITS:     screen_credits_update(app, dt); break;
-            case APP_SCREEN_SETTINGS:    screen_settings_update(app, dt); break;
-            case APP_SCREEN_PLAY:        screen_play_update(app, dt); break;
+            case APP_SCREEN_MAIN_MENU:   screen_main_menu_update(app); break;
+            case APP_SCREEN_MATCH_SETUP: screen_match_setup_update(app); break;
+            case APP_SCREEN_HELP:        screen_help_update(app); break;
+            case APP_SCREEN_CREDITS:     screen_credits_update(app); break;
+            case APP_SCREEN_SETTINGS:    screen_settings_update(app); break;
+            case APP_SCREEN_PLAY:        screen_play_update(app); break;
             default: break;
         }
     }
@@ -52,17 +57,17 @@ namespace {
             case APP_SCREEN_MATCH_SETUP: screen_match_setup_draw(app); break;
             case APP_SCREEN_HELP:        screen_help_draw(); break;
             case APP_SCREEN_CREDITS:     screen_credits_draw(); break;
-            case APP_SCREEN_SETTINGS:    screen_settings_draw(); break;
-            case APP_SCREEN_PLAY:        screen_play_draw(); break;
+            case APP_SCREEN_SETTINGS:    screen_settings_draw(app); break;
+            case APP_SCREEN_PLAY:        screen_play_draw(app); break;
             default: break;
         }
     }
 
-    void _update_current_overlay(GameAppState& app, float dt) {
+    void _update_current_overlay(GameAppState& app) {
         switch (app.currentOverlay) {
-            case APP_OVERLAY_CONFIRM_EXIT: overlay_confirm_exit_update(app, dt); break;
-            case APP_OVERLAY_PAUSE:        overlay_pause_update(app, dt); break;
-            case APP_OVERLAY_RESULT:       overlay_result_update(app, dt); break;
+            case APP_OVERLAY_CONFIRM_EXIT: overlay_confirm_exit_update(app); break;
+            case APP_OVERLAY_PAUSE:        overlay_pause_update(app); break;
+            case APP_OVERLAY_RESULT:       overlay_result_update(app); break;
             default: break;
         }
     }
@@ -76,6 +81,8 @@ namespace {
     }
 
 }
+
+
 
 void game_app_reset_match_setup(GameAppState& app) {
     app.setup.step = MATCH_SETUP_STEP_MODE;
@@ -108,20 +115,23 @@ void game_app_open_confirm_exit(GameAppState& app, ExitTarget target) {
 void game_app_init(GameAppState& app) {
     app.currentScreen = APP_SCREEN_MAIN_MENU;
     app.currentOverlay = APP_OVERLAY_NONE;
+    app.settingsReturnScreen = APP_SCREEN_MAIN_MENU;
     app.exitTarget = EXIT_TARGET_NONE;
     app.shouldQuit = false;
     app.gameSettings = load_game_settings();
+    app.settings = {};
     app.resultMessage[0] = '\0';
     game_app_reset_match_setup(app);
+    game_app_apply_audio_settings(app);
 }
 
-void game_app_update(GameAppState& app, float dt) {
+void game_app_update(GameAppState& app) {
     if (app.currentOverlay == APP_OVERLAY_NONE) {
-        _update_current_screen(app, dt);
+        _update_current_screen(app);
         return;
     }
 
-    _update_current_overlay(app, dt);
+    _update_current_overlay(app);
 }
 
 void game_app_draw(const GameAppState& app) {
@@ -133,4 +143,26 @@ void game_app_draw(const GameAppState& app) {
     ui_button_set_interaction_enabled(true); // mở lại cho ovẻlay
 
    _draw_current_overlay(app);
+}
+
+void game_app_apply_audio_settings(const GameAppState& app) {
+    const float masterVolume = _volume_percent_to_float(app.settings.masterVolumePercent);
+    const float musicVolume = app.settings.musicMuted
+        ? 0.0f
+        : masterVolume * _volume_percent_to_float(app.settings.musicVolumePercent);
+    const float soundVolume = app.settings.soundMuted
+        ? 0.0f
+        : masterVolume * _volume_percent_to_float(app.settings.soundVolumePercent);
+
+    if (g_assets.musics.bgm.frameCount > 0) {
+        SetMusicVolume(g_assets.musics.bgm, musicVolume);
+    }
+
+    if (g_assets.sounds.click.frameCount > 0) {
+        SetSoundVolume(g_assets.sounds.click, soundVolume);
+    }
+
+    if (g_assets.sounds.end.frameCount > 0) {
+        SetSoundVolume(g_assets.sounds.end, soundVolume);
+    }
 }

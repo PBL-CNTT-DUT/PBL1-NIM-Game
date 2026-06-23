@@ -4,7 +4,7 @@
 #include "assets/game_assets.h"
 #include "raylib.h"
 #include "render/theme.h"
-#include "screens/screen_common.h"
+#include "screens/screens.h"
 #include "ui/ui.h"
 
 namespace {
@@ -20,7 +20,7 @@ namespace {
     Rectangle BTN_CREDITS  = {540, 514, 200, 75};
     Rectangle BTN_QUIT     = {540, 602, 200, 75};
 
-    const UIButtonStyle BTN_STYLE = ui_style_button_common();
+
 
     void _draw_title(Rectangle rect, Font font, const char* text, float fontSize, Color color) {
         ui_draw_text_in_rect_with_outline(
@@ -39,8 +39,7 @@ namespace {
 
 } //
 
-void screen_main_menu_update(GameAppState& app, float dt) {
-    (void)dt;
+void screen_main_menu_update(GameAppState& app) {
 
     if (ui_button_is_clicked(BTN_PLAY_ID, BTN_PLAY)) {
         game_app_reset_match_setup(app);
@@ -51,6 +50,7 @@ void screen_main_menu_update(GameAppState& app, float dt) {
 
     if (ui_button_is_clicked(BTN_SETTINGS_ID, BTN_SETTINGS)) {
         app.currentOverlay = APP_OVERLAY_NONE;
+        app.settingsReturnScreen = APP_SCREEN_MAIN_MENU;
         app.currentScreen = APP_SCREEN_SETTINGS;
         return;
     }
@@ -73,7 +73,7 @@ void screen_main_menu_update(GameAppState& app, float dt) {
 }
 
 void screen_main_menu_draw() {
-    ClearBackground(theme_bg_color());
+    ClearBackground(THEME_BG_COLOR);
 
     screen_draw_background(g_assets.images.bg_main_menu, BLACK);
 
@@ -85,9 +85,9 @@ void screen_main_menu_draw() {
         GOLD
     );
 
-    screen_draw_button(BTN_PLAY_ID, BTN_PLAY, u8"CHƠI", 36.0f, BTN_STYLE);
-    screen_draw_button(BTN_SETTINGS_ID, BTN_SETTINGS, u8"CÀI ĐẶT", 36.0f, BTN_STYLE);
-    screen_draw_button(BTN_HELP_ID, BTN_HELP, u8"HƯỚNG DẪN", 36.0f, BTN_STYLE);
-    screen_draw_button(BTN_CREDITS_ID, BTN_CREDITS, u8"THÔNG TIN", 36.0f, BTN_STYLE);
-    screen_draw_button(BTN_QUIT_ID, BTN_QUIT, u8"THOÁT", 36.0f, BTN_STYLE);
+    screen_draw_button(BTN_PLAY_ID, BTN_PLAY, u8"CHƠI", 36.0f);
+    screen_draw_button(BTN_SETTINGS_ID, BTN_SETTINGS, u8"CÀI ĐẶT", 36.0f);
+    screen_draw_button(BTN_HELP_ID, BTN_HELP, u8"HƯỚNG DẪN", 36.0f);
+    screen_draw_button(BTN_CREDITS_ID, BTN_CREDITS, u8"THÔNG TIN", 36.0f);
+    screen_draw_button(BTN_QUIT_ID, BTN_QUIT, u8"THOÁT", 36.0f);
 }

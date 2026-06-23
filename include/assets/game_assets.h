@@ -28,13 +28,27 @@ struct ImageAssets {
     Texture2D bg_main_menu{};
     Texture2D bg_match_setup{};
     Texture2D bg_play{};
+    Texture2D bg_setting{};
+    Texture2D bg_help{};
 };
 
 struct ButtonAssets {
     UIButtonStateTextures common{};
     UIButtonStateTextures cloud{};
-    UIButtonStateTextures play_setup_decrease{};
-    UIButtonStateTextures play_setup_increase{};
+    UIButtonStateTextures increase{};
+    UIButtonStateTextures decrease{};
+    UIButtonStateTextures pause{};
+    UIButtonStateTextures setting{};
+    UIButtonStateTextures music_on{};
+    UIButtonStateTextures music_off{};
+    UIButtonStateTextures music_increase{};
+    UIButtonStateTextures music_decrease{};
+    UIButtonStateTextures sound_on{};
+    UIButtonStateTextures sound_off{};
+    UIButtonStateTextures sound_increase{};
+    UIButtonStateTextures sound_decrease{};
+    UIButtonStateTextures yes{};
+    UIButtonStateTextures no{};
 };
 
 struct SwitchAssets {

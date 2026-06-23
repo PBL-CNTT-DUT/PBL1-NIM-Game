@@ -9,47 +9,32 @@ namespace {
     bool g_backspaceHeld = false;
     double g_nextBackspaceRepeatTime = 0.0;
 
-    int _append_utf8_codepoint(char* buffer, int capacity, int length, int codepoint) {
-        unsigned char encoded[4];
-        int encodedLength = 0;
 
-        if (codepoint <= 0x7F) {
-            encoded[0] = (unsigned char)codepoint;
-            encodedLength = 1;
-        } else if (codepoint <= 0x7FF) {
-            encoded[0] = (unsigned char)(0xC0 | (codepoint >> 6));
-            encoded[1] = (unsigned char)(0x80 | (codepoint & 0x3F));
-            encodedLength = 2;
-        } else if (codepoint <= 0xFFFF) {
-            encoded[0] = (unsigned char)(0xE0 | (codepoint >> 12));
-            encoded[1] = (unsigned char)(0x80 | ((codepoint >> 6) & 0x3F));
-            encoded[2] = (unsigned char)(0x80 | (codepoint & 0x3F));
-            encodedLength = 3;
-        } else if (codepoint <= 0x10FFFF) {
-            encoded[0] = (unsigned char)(0xF0 | (codepoint >> 18));
-            encoded[1] = (unsigned char)(0x80 | ((codepoint >> 12) & 0x3F));
-            encoded[2] = (unsigned char)(0x80 | ((codepoint >> 6) & 0x3F));
-            encoded[3] = (unsigned char)(0x80 | (codepoint & 0x3F));
-            encodedLength = 4;
-        } else {
+    int _append_input_character(char* buffer, int capacity, int length, int codepoint) {    
+        if (codepoint < 32) {
             return length;
         }
 
-        if (length + encodedLength >= capacity) {
+        int utf8Size = 0;
+        const char* utf8 = CodepointToUTF8(codepoint, &utf8Size);
+        if (utf8 == nullptr || utf8Size <= 0) {
             return length;
         }
 
-        for (int i = 0; i < encodedLength; ++i) {
-            buffer[length + i] = (char)encoded[i];
+        if (length + utf8Size >= capacity) {
+            return length;
         }
 
-        length += encodedLength;
+        std::memcpy(buffer + length, utf8, utf8Size);
+
+        length += utf8Size;
         buffer[length] = '\0';
+
         return length;
     }
 
-    void _remove_last_utf8_codepoint(char* buffer, int length) {
-        if (length <= 0) {
+    void _remove_last_character(char* buffer, int length) {
+        if (length <= 0 || buffer == nullptr || buffer[0] == '\0') {
             return;
         }
 
@@ -105,15 +90,12 @@ void ui_text_input_update(char* buffer, int capacity, bool active) {
 
     int codepoint = GetCharPressed();
     while (codepoint > 0) {
-        if (codepoint >= 32) {
-            length = _append_utf8_codepoint(buffer, capacity, length, codepoint);
-        }
-
+        length = _append_input_character(buffer, capacity, length, codepoint);
         codepoint = GetCharPressed();
     }
 
     if (_should_delete_backspace(active) && length > 0) {
-        _remove_last_utf8_codepoint(buffer, length);
+        _remove_last_character(buffer, length);
     }
 }
 
