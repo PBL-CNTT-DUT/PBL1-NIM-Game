@@ -42,10 +42,12 @@ namespace {
     constexpr int BTN_ROUND_BACK_ID = 408;
     constexpr int BTN_ROUND_START_ID = 409;
 
+   
     Rectangle BTN_MODE_1P = {160, 300, 420, 80};
     Rectangle BTN_MODE_2P = {700, 300, 420, 80};
-    Rectangle BTN_MODE_BACK = {490, 600, 300, 70};
+    Rectangle BTN_MODE_BACK = {510, 600, 260, 70};
 
+  
     Rectangle BTN_DIFF_VEASY = {110, 300, 300, 70};
     Rectangle BTN_DIFF_EASY  = {490, 300, 300, 70};
     Rectangle BTN_DIFF_MED   = {870, 300, 300, 70};
@@ -54,48 +56,39 @@ namespace {
     Rectangle BTN_DIFF_NEXT  = {690, 600, 260, 70};
     Rectangle BTN_DIFF_BACK  = {330, 600, 260, 70};
 
-    Rectangle INPUT_P1 = {390, 240, 500, 64};
-    Rectangle INPUT_P2 = {390, 340, 500, 64};
+    
+    Rectangle INPUT_P1 = {390, 240, 500, 65};
+    Rectangle INPUT_P2 = {390, 340, 500, 65};
     Rectangle BTN_NAMES_NEXT = {690, 600, 260, 70};
     Rectangle BTN_NAMES_BACK = {330, 600, 260, 70};
-    Rectangle ROUND_PANEL = {170, 140, 940, 560};
-    Rectangle ROUND_TITLE_RECT = {170, 162, 940, 40};
-    Rectangle ROUND_RULE_LABEL = {218, 204, 844, 24};
-    Rectangle BTN_ROUND_RULE_WIN = {218, 232, 408, 66};
-    Rectangle BTN_ROUND_RULE_LOSE = {654, 232, 408, 66};
-    Rectangle ROUND_SWITCH_LABEL = {218, 354, 300, 24};
-    Rectangle BTN_ROUND_SWITCH = {858, 346, 180, 54};
-    Rectangle ROUND_SWITCH_STATE_LABEL = {858, 406, 180, 20};
-    Rectangle ROUND_TAKE_LABEL = {218, 454, 280, 24};
-    Rectangle BTN_ROUND_LIMIT_DEC = {792, 436, 54, 56};
-    Rectangle ROUND_TAKE_VALUE = {862, 432, 120, 64};
-    Rectangle BTN_ROUND_LIMIT_INC = {998, 436, 54, 56};
-    Rectangle ROUND_PILE_LABEL = {218, 554, 280, 24};
-    Rectangle BTN_ROUND_PILE_DEC = {792, 536, 54, 56};
-    Rectangle ROUND_PILE_VALUE = {862, 532, 120, 64};
-    Rectangle BTN_ROUND_PILE_INC = {998, 536, 54, 56};
-    Rectangle ROUND_PILE_RANGE_LABEL = {218, 592, 844, 20};
-    Rectangle BTN_ROUND_BACK = {218, 614, 220, 62};
-    Rectangle BTN_ROUND_START = {842, 614, 220, 62};
 
-    const UIButtonStyle BTN_STYLE = ui_style_button_common();
-    const UIButtonStyle BTN_SELECTED_STYLE = ui_style_button_common();
+    
+    Rectangle ROUND_PANEL = {50, 130, 1180, 570};
+    Rectangle ROUND_TITLE_RECT = {50, 145, 1180, 35};
 
-    const UIButtonStyle BTN_DISABLED_STYLE = {
-        Color{82, 92, 118, 220},
-        Color{82, 92, 118, 220},
-        Color{82, 92, 118, 220},
-        Color{36, 42, 58, 255}
-    };
+    Rectangle ROUND_RULE_LABEL = {130, 190, 1020, 25};
+    Rectangle BTN_ROUND_RULE_WIN = {130, 220, 500, 65};
+    Rectangle BTN_ROUND_RULE_LOSE = {650, 225, 500, 65};
 
-    const UITextInputStyle INPUT_STYLE = {
-        Color{24, 28, 44, 255},
-        Color{36, 42, 62, 255},
-        Color{120, 130, 160, 255},
-        theme_accent_color(),
-        RAYWHITE,
-        Color{170, 175, 190, 255}
-    };
+    Rectangle ROUND_SWITCH_LABEL = {130, 315, 300, 25};
+    Rectangle BTN_ROUND_SWITCH = {890, 310, 140, 45};
+    Rectangle ROUND_SWITCH_STATE_LABEL = {890, 360, 140, 20};
+
+    Rectangle ROUND_TAKE_LABEL = {130, 415, 300, 25};
+    Rectangle BTN_ROUND_LIMIT_DEC = {830, 410, 55, 55};
+    Rectangle ROUND_TAKE_VALUE = {900, 405, 120, 65};
+    Rectangle BTN_ROUND_LIMIT_INC = {1035, 410, 55, 55};
+
+    Rectangle ROUND_PILE_LABEL = {130, 500, 300, 25};
+    Rectangle BTN_ROUND_PILE_DEC = {830, 495, 55, 55};
+    Rectangle ROUND_PILE_VALUE = {900, 490, 120, 65};
+    Rectangle BTN_ROUND_PILE_INC = {1035, 495, 55, 55};
+    Rectangle ROUND_PILE_RANGE_LABEL = {130, 560, 1020, 20};
+
+    Rectangle BTN_ROUND_BACK = {130, 615, 260, 60};
+    Rectangle BTN_ROUND_START = {830, 615, 260, 60};
+
+
 
     int _clamp_int(int value, int minValue, int maxValue) {
         return _max_int(minValue, _min_int(value, maxValue));
@@ -172,39 +165,18 @@ namespace {
 
     const UIButtonStateTextures* _stepper_textures(bool isIncrease) {
         const UIButtonStateTextures& textures = isIncrease
-            ? g_assets.buttons.play_setup_increase
-            : g_assets.buttons.play_setup_decrease;
+            ? g_assets.buttons.increase
+            : g_assets.buttons.decrease;
 
-        if (textures.normal.id != 0) {
+        if (ui_button_has_any_textures(textures)) {
             return &textures;
         }
 
-        if (g_assets.buttons.common.normal.id != 0) {
+        if (ui_button_has_any_textures(g_assets.buttons.common)) {
             return &g_assets.buttons.common;
         }
 
         return nullptr;
-    }
-
-    void _draw_stepper_symbol(Rectangle rect, bool isIncrease, Color color) {
-        const Rectangle horizontalBar = {
-            rect.x + rect.width * 0.24f,
-            rect.y + rect.height * 0.46f,
-            rect.width * 0.52f,
-            rect.height * 0.10f
-        };
-
-        DrawRectangleRounded(horizontalBar, 0.4f, 6, color);
-
-        if (isIncrease) {
-            const Rectangle verticalBar = {
-                rect.x + rect.width * 0.45f,
-                rect.y + rect.height * 0.24f,
-                rect.width * 0.10f,
-                rect.height * 0.52f
-            };
-            DrawRectangleRounded(verticalBar, 0.4f, 6, color);
-        }
     }
 
     void _draw_round_stepper_button(int buttonId, Rectangle rect, bool enabled, bool isIncrease) {
@@ -219,14 +191,18 @@ namespace {
             return;
         }
 
-        ui_button_draw(rect, enabled ? BTN_STYLE : BTN_DISABLED_STYLE, state);
-
-        Color iconColor = Color{236, 240, 248, 255};
-        if (enabled && state == UI_BTN_HOVER) iconColor = WHITE;
-        if (enabled && state == UI_BTN_PRESSED) iconColor = Color{250, 214, 126, 255};
-        if (!enabled) iconColor = Color{170, 178, 194, 255};
-
-        _draw_stepper_symbol(rect, isIncrease, iconColor);
+        ui_button_draw(rect, enabled ? UI_BUTTON_STYLE_COMMON : UI_BUTTON_STYLE_DISABLED, state);
+        const Color textColor = enabled ? RAYWHITE : LIGHTGRAY;
+        ui_button_draw_text(
+            rect,
+            isIncrease ? "+" : "-",
+            g_assets.fonts.common,
+            34.0f,
+            state,
+            textColor,
+            WHITE,
+            GOLD
+        );
     }
 
     void _draw_round_switch(Rectangle rect, bool enabled, UIButtonState state) {
@@ -244,12 +220,12 @@ namespace {
         }
 
         const Color trackColor = enabled
-            ? (state == UI_BTN_PRESSED ? Color{74, 173, 114, 255} : Color{92, 201, 128, 255})
-            : Color{114, 122, 146, 255};
-        const Color thumbColor = enabled ? RAYWHITE : Color{226, 232, 240, 255};
+            ? (state == UI_BTN_PRESSED ? UI_COLOR_SWITCH_ON_PRESSED : UI_COLOR_SWITCH_ON)
+            : UI_COLOR_SWITCH_OFF;
+        const Color thumbColor = enabled ? RAYWHITE : LIGHTGRAY;
 
         DrawRectangleRounded(rect, 0.48f, 10, trackColor);
-        DrawRectangleRoundedLinesEx(rect, 0.48f, 10, 2.0f, Color{24, 32, 50, 255});
+        DrawRectangleRoundedLinesEx(rect, 0.48f, 10, 2.0f, UI_COLOR_FRAME);
 
         const float thumbSize = rect.height - 10.0f;
         const float thumbX = enabled
@@ -263,10 +239,11 @@ namespace {
         );
     }
 
+    
     void _draw_round_value_box(Rectangle rect, int value, bool enabled) {
-        const Color fillColor = enabled ? Color{24, 28, 44, 255} : Color{36, 40, 52, 240};
-        const Color borderColor = enabled ? theme_accent_color() : Color{90, 98, 118, 255};
-        const Color textColor = enabled ? RAYWHITE : Color{176, 184, 202, 255};
+        const Color fillColor   = enabled ? DARKGRAY : ColorAlpha(DARKGRAY, 0.55f);
+        const Color borderColor = enabled ? THEME_ACCENT_COLOR : DARKGRAY;
+        const Color textColor   = enabled ? RAYWHITE : LIGHTGRAY;
 
         DrawRectangleRec(rect, fillColor);
         DrawRectangleLinesEx(rect, 2.0f, borderColor);
@@ -288,8 +265,9 @@ namespace {
         const bool canDecreasePiles = app.setup.pileCount > _min_pile_count(app.gameSettings);
         const bool canIncreasePiles = app.setup.pileCount < _max_pile_count(app.gameSettings);
 
-        DrawRectangleRounded(ROUND_PANEL, 0.10f, 10, Color{14, 22, 44, 235});
-        DrawRectangleRoundedLinesEx(ROUND_PANEL, 0.10f, 10, 3.0f, theme_accent_color());
+       
+        DrawRectangleRounded(ROUND_PANEL, 0.05f, 10, ui_color_panel_fill());
+        DrawRectangleRoundedLinesEx(ROUND_PANEL, 0.05f, 10, 3.0f, THEME_ACCENT_COLOR);
 
         ui_draw_text_in_rect_with_outline(
             g_assets.fonts.common,
@@ -300,19 +278,20 @@ namespace {
             0.5f,
             0.5f,
             2.0f,
-            theme_text_color(),
+            THEME_TEXT_COLOR,
             BLACK
         );
 
+       
         ui_draw_text_in_rect(
             g_assets.fonts.common,
             u8"Chọn luật kết thúc",
             ROUND_RULE_LABEL,
-            22.0f,
+            26.0f,
             1.0f,
             0.0f,
             0.5f,
-            Color{233, 239, 250, 255}
+            UI_COLOR_LABEL
         );
 
         screen_draw_button(
@@ -320,7 +299,6 @@ namespace {
             BTN_ROUND_RULE_WIN,
             u8"BỐC CUỐI THẮNG",
             28.0f,
-            BTN_SELECTED_STYLE,
             app.setup.gameRule == GAME_RULE_LAST_TAKE_WIN
         );
         screen_draw_button(
@@ -328,19 +306,19 @@ namespace {
             BTN_ROUND_RULE_LOSE,
             u8"BỐC CUỐI THUA",
             28.0f,
-            BTN_SELECTED_STYLE,
             app.setup.gameRule == GAME_RULE_LAST_TAKE_LOSE
         );
 
+       
         ui_draw_text_in_rect(
             g_assets.fonts.common,
             u8"Có giới hạn không?",
             ROUND_SWITCH_LABEL,
-            22.0f,
+            26.0f,
             1.0f,
             0.0f,
             0.5f,
-            Color{233, 239, 250, 255}
+            UI_COLOR_LABEL
         );
 
         _draw_round_switch(BTN_ROUND_SWITCH, app.setup.useTakeLimit, ui_button_get_state(BTN_ROUND_SWITCH_ID, BTN_ROUND_SWITCH));
@@ -349,22 +327,23 @@ namespace {
             g_assets.fonts.common,
             app.setup.useTakeLimit ? u8"ĐANG BẬT" : u8"ĐANG TẮT",
             ROUND_SWITCH_STATE_LABEL,
-            18.0f,
+            20.0f,
             1.0f,
             0.5f,
             0.5f,
-            app.setup.useTakeLimit ? Color{177, 244, 188, 255} : Color{206, 214, 228, 255}
+            app.setup.useTakeLimit ? GREEN : LIGHTGRAY
         );
 
+        
         ui_draw_text_in_rect(
             g_assets.fonts.common,
             u8"Giới hạn mỗi lượt",
             ROUND_TAKE_LABEL,
-            22.0f,
+            26.0f,
             1.0f,
             0.0f,
             0.5f,
-            Color{233, 239, 250, 255}
+            UI_COLOR_LABEL
         );
 
         _draw_round_stepper_button(BTN_ROUND_LIMIT_DEC_ID, BTN_ROUND_LIMIT_DEC, canDecreaseTake, false);
@@ -375,15 +354,16 @@ namespace {
             DrawRectangleRounded(ROUND_TAKE_VALUE, 0.18f, 8, Fade(BLACK, 0.28f));
         }
 
+       
         ui_draw_text_in_rect(
             g_assets.fonts.common,
             u8"Số lượng đống",
             ROUND_PILE_LABEL,
-            22.0f,
+            26.0f,
             1.0f,
             0.0f,
             0.5f,
-            Color{233, 239, 250, 255}
+            UI_COLOR_LABEL
         );
 
         _draw_round_stepper_button(BTN_ROUND_PILE_DEC_ID, BTN_ROUND_PILE_DEC, canDecreasePiles, false);
@@ -402,20 +382,33 @@ namespace {
             g_assets.fonts.common,
             pileRangeText,
             ROUND_PILE_RANGE_LABEL,
-            18.0f,
+            20.0f,
             1.0f,
             0.0f,
             0.5f,
-            Color{206, 220, 240, 255}
+            UI_COLOR_TEXT_MUTED
         );
 
-        screen_draw_button(BTN_ROUND_BACK_ID, BTN_ROUND_BACK, u8"QUAY LẠI", 28.0f, BTN_STYLE);
-        screen_draw_button(BTN_ROUND_START_ID, BTN_ROUND_START, u8"BẮT ĐẦU", 28.0f, BTN_STYLE);
+       
+        screen_draw_button(BTN_ROUND_BACK_ID, BTN_ROUND_BACK, u8"QUAY LẠI", 28.0f);
+        screen_draw_button(BTN_ROUND_START_ID, BTN_ROUND_START, u8"BẮT ĐẦU", 28.0f);
     }
 }
 
-void screen_match_setup_update(GameAppState& app, float dt) {
-    (void)dt;
+
+
+
+
+
+
+
+
+
+// * ---------------------------------------------------------------------
+
+
+
+void screen_match_setup_update(GameAppState& app) {
 
     switch (app.setup.step) {
         case MATCH_SETUP_STEP_MODE: {
@@ -548,9 +541,10 @@ void screen_match_setup_update(GameAppState& app, float dt) {
     }
 }
 
+
 void screen_match_setup_draw(const GameAppState& app) {
-    ClearBackground(theme_bg_color());
-    screen_draw_background(g_assets.images.bg_match_setup, Color{35, 30, 55, 255});
+    ClearBackground(THEME_BG_COLOR);
+    screen_draw_background(g_assets.images.bg_match_setup, DARKPURPLE);
     const Rectangle screenRect = {0.0f, 0.0f, (float)GetScreenWidth(), (float)GetScreenHeight()};
 
     ui_draw_text_in_rect_with_outline(
@@ -560,9 +554,9 @@ void screen_match_setup_draw(const GameAppState& app) {
         84.0f,
         2.0f,
         0.5f,
-        0.1f,
+        0.05f,
         3.0f,
-        theme_text_color(),
+        THEME_TEXT_COLOR,
         BLACK
     );
 
@@ -574,15 +568,15 @@ void screen_match_setup_draw(const GameAppState& app) {
             64.0f,
             2.0f,
             0.5f,
-            0.25f,
+            0.22f,
             2.0f,
-            theme_accent_color(),
+            THEME_ACCENT_COLOR,
             BLACK
         );
 
-        screen_draw_button(BTN_MODE_1P_ID, BTN_MODE_1P, u8"1 NGƯỜI CHƠI", 32.0f, BTN_STYLE);
-        screen_draw_button(BTN_MODE_2P_ID, BTN_MODE_2P, u8"2 NGƯỜI CHƠI", 32.0f, BTN_STYLE);
-        screen_draw_button(BTN_MODE_BACK_ID, BTN_MODE_BACK, u8"QUAY LẠI", 32.0f, BTN_STYLE);
+        screen_draw_button(BTN_MODE_1P_ID, BTN_MODE_1P, u8"1 NGƯỜI CHƠI", 36.0f);
+        screen_draw_button(BTN_MODE_2P_ID, BTN_MODE_2P, u8"2 NGƯỜI CHƠI", 36.0f);
+        screen_draw_button(BTN_MODE_BACK_ID, BTN_MODE_BACK, u8"QUAY LẠI", 36.0f);
         return;
     }
 
@@ -594,25 +588,25 @@ void screen_match_setup_draw(const GameAppState& app) {
             64.0f,
             2.0f,
             0.5f,
-            0.25f,
+            0.22f,
             2.0f,
-            theme_accent_color(),
+            THEME_ACCENT_COLOR,
             BLACK
         );
 
-        screen_draw_button(BTN_DIFF_VEASY_ID, BTN_DIFF_VEASY, _difficulty_label(AI_DIFFICULTY_VERY_EASY), 32.0f, BTN_SELECTED_STYLE,
+        screen_draw_button(BTN_DIFF_VEASY_ID, BTN_DIFF_VEASY, _difficulty_label(AI_DIFFICULTY_VERY_EASY), 36.0f,
             app.setup.difficulty == AI_DIFFICULTY_VERY_EASY);
-        screen_draw_button(BTN_DIFF_EASY_ID, BTN_DIFF_EASY, _difficulty_label(AI_DIFFICULTY_EASY), 32.0f, BTN_SELECTED_STYLE,
+        screen_draw_button(BTN_DIFF_EASY_ID, BTN_DIFF_EASY, _difficulty_label(AI_DIFFICULTY_EASY), 36.0f,
             app.setup.difficulty == AI_DIFFICULTY_EASY);
-        screen_draw_button(BTN_DIFF_MED_ID, BTN_DIFF_MED, _difficulty_label(AI_DIFFICULTY_MEDIUM), 32.0f, BTN_SELECTED_STYLE,
+        screen_draw_button(BTN_DIFF_MED_ID, BTN_DIFF_MED, _difficulty_label(AI_DIFFICULTY_MEDIUM), 36.0f,
             app.setup.difficulty == AI_DIFFICULTY_MEDIUM);
-        screen_draw_button(BTN_DIFF_HARD_ID, BTN_DIFF_HARD, _difficulty_label(AI_DIFFICULTY_HARD), 32.0f, BTN_SELECTED_STYLE,
+        screen_draw_button(BTN_DIFF_HARD_ID, BTN_DIFF_HARD, _difficulty_label(AI_DIFFICULTY_HARD), 36.0f,
             app.setup.difficulty == AI_DIFFICULTY_HARD);
-        screen_draw_button(BTN_DIFF_VHARD_ID, BTN_DIFF_VHARD, _difficulty_label(AI_DIFFICULTY_VERY_HARD), 32.0f, BTN_SELECTED_STYLE,
+        screen_draw_button(BTN_DIFF_VHARD_ID, BTN_DIFF_VHARD, _difficulty_label(AI_DIFFICULTY_VERY_HARD), 36.0f,
             app.setup.difficulty == AI_DIFFICULTY_VERY_HARD);
 
-        screen_draw_button(BTN_DIFF_BACK_ID, BTN_DIFF_BACK, u8"QUAY LẠI", 32.0f, BTN_STYLE);
-        screen_draw_button(BTN_DIFF_NEXT_ID, BTN_DIFF_NEXT, u8"TIẾP TỤC", 32.0f, BTN_STYLE);
+        screen_draw_button(BTN_DIFF_BACK_ID, BTN_DIFF_BACK, u8"QUAY LẠI", 36.0f);
+        screen_draw_button(BTN_DIFF_NEXT_ID, BTN_DIFF_NEXT, u8"TIẾP TỤC", 36.0f);
         return;
     }
 
@@ -624,9 +618,9 @@ void screen_match_setup_draw(const GameAppState& app) {
             64.0f,
             2.0f,
             0.5f,
-            0.25f,
+            0.22f,
             2.0f,
-            theme_accent_color(),
+            THEME_ACCENT_COLOR,
             BLACK
         );
 
@@ -639,7 +633,7 @@ void screen_match_setup_draw(const GameAppState& app) {
             0.0f,
             0.5f,
             2.0f,
-            theme_text_color(),
+            THEME_TEXT_COLOR,
             BLACK
         );
 
@@ -650,7 +644,7 @@ void screen_match_setup_draw(const GameAppState& app) {
             g_assets.fonts.common,
             32.0f,
             app.setup.activeNameInput == 0,
-            INPUT_STYLE
+            ui_style_text_input_common()
         );
 
         if (app.setup.gameMode == GAME_MODE_PVP) {
@@ -663,7 +657,7 @@ void screen_match_setup_draw(const GameAppState& app) {
                 0.0f,
                 0.5f,
                 2.0f,
-                theme_text_color(),
+                THEME_TEXT_COLOR,
                 BLACK
             );
 
@@ -674,7 +668,7 @@ void screen_match_setup_draw(const GameAppState& app) {
                 g_assets.fonts.common,
                 32.0f,
                 app.setup.activeNameInput == 1,
-                INPUT_STYLE
+                ui_style_text_input_common()
             );
         } else {
             ui_draw_text_in_rect_with_outline(
@@ -686,13 +680,13 @@ void screen_match_setup_draw(const GameAppState& app) {
                 0.0f,
                 0.5f,
                 2.0f,
-                theme_text_color(),
+                THEME_TEXT_COLOR,
                 BLACK
             );
         }
 
-        screen_draw_button(BTN_NAMES_BACK_ID, BTN_NAMES_BACK, u8"QUAY LẠI", 32.0f, BTN_STYLE);
-        screen_draw_button(BTN_NAMES_NEXT_ID, BTN_NAMES_NEXT, u8"TIẾP TỤC", 32.0f, BTN_STYLE);
+        screen_draw_button(BTN_NAMES_BACK_ID, BTN_NAMES_BACK, u8"QUAY LẠI", 36.0f);
+        screen_draw_button(BTN_NAMES_NEXT_ID, BTN_NAMES_NEXT, u8"TIẾP TỤC", 36.0f);
         return;
     }
 

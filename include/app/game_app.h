@@ -43,22 +43,35 @@ struct MatchSetupState {
     int pileCount = 3;
 };
 
+struct AppSettingsState {
+    int masterVolumePercent = 100;
+    int musicVolumePercent = 10;
+    int soundVolumePercent = 55;
+    bool musicMuted = false;
+    bool soundMuted = false;
+    bool hintsEnabled = true;
+};
+
 struct GameAppState {
     AppScreen currentScreen = APP_SCREEN_MAIN_MENU;
     AppOverlay currentOverlay = APP_OVERLAY_NONE;
+    AppScreen settingsReturnScreen = APP_SCREEN_MAIN_MENU;
     ExitTarget exitTarget = EXIT_TARGET_NONE;
     bool shouldQuit = false;
 
     GameSettings gameSettings{};
+    AppSettingsState settings{};
+    // Draft cau hinh truoc tran; game runtime nam trong screen_play.
     MatchSetupState setup{};
 
     char resultMessage[96] = "";
 };
 
 void game_app_init(GameAppState& app);
-void game_app_update(GameAppState& app, float dt);
+void game_app_update(GameAppState& app);
 void game_app_draw(const GameAppState& app);
 
 void game_app_reset_match_setup(GameAppState& app);
 void game_app_show_result(GameAppState& app, const char* message);
 void game_app_open_confirm_exit(GameAppState& app, ExitTarget target);
+void game_app_apply_audio_settings(const GameAppState& app);

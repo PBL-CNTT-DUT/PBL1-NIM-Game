@@ -1,5 +1,6 @@
-﻿#include "raylib.h"
+#include "raylib.h"
 #include "app/game_app.h"
+#include "audio/audio_manager.h"
 #include "config/config.h"
 #include "assets/game_assets.h"
 
@@ -8,32 +9,25 @@ int main() {
     SetExitKey(KEY_NULL);
     SetTargetFPS(AppConfig::TARGET_FPS);
 
-    InitAudioDevice();
-    Music bgm = LoadMusicStream("assets/music/beanfeast.mp3");
-    PlayMusicStream(bgm);
-    SetMusicVolume(bgm, 0.1f);
-
+    audio_manager_init();
     game_assets_load();
 
     GameAppState app;
     game_app_init(app);
 
+    // game loop 
     while (!WindowShouldClose() && !app.shouldQuit) {
-        UpdateMusicStream(bgm);
-
-        float dt = GetFrameTime();
-        game_app_update(app, dt);
+        audio_manager_update();
+        game_app_update(app);
 
         BeginDrawing();
             game_app_draw(app);
-
+            // meo :>
         EndDrawing();
     }
 
-    UnloadMusicStream(bgm);
-    UnloadSound(g_assets.sounds.click);
-    UnloadSound(g_assets.sounds.end);
     game_assets_unload();
+    audio_manager_shutdown();
 
     CloseWindow();
     return 0;

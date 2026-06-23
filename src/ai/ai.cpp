@@ -66,14 +66,12 @@ namespace {
         for (int pileIndex = 0; pileIndex < game.piles.size; ++pileIndex) {
             nimSum ^= get(game.piles, pileIndex);
         }
-
-        //  ở thế thua
+       
         if (nimSum == 0) return false;
 
         for (int pileIndex = 0; pileIndex < game.piles.size; ++pileIndex) {
             int stonesInPile = get(game.piles, pileIndex);
             int target = stonesInPile ^ nimSum;
-
             // đưa nim sum về trạng thái = 0
             if (target < stonesInPile) {
                 int take = stonesInPile - target;
@@ -84,7 +82,6 @@ namespace {
                 }
             }
         }
-
         return false;
     }
 
@@ -338,4 +335,20 @@ Move choose_ai_move(const GameState& game) {
     }
 
     return _choose_random_move(game);
+}
+
+Move choose_hint_move(const GameState& game) {
+    
+    Move mustMove;
+    if (_find_must_play_move(game, mustMove) && is_valid_move(game, mustMove)) {
+        return mustMove;
+    }
+
+    Move optimalMove;
+    if (_find_optimal_move(game, optimalMove) && is_valid_move(game, optimalMove)) {
+        return optimalMove;
+    }
+
+    
+    return _choose_random_move(game, 1);
 }

@@ -4,11 +4,14 @@
 
 namespace {
     void _swap_int (int& a, int& b) {
-    int temp = a;
-    a = b;
-    b = temp;
-}
+        int temp = a;
+        a = b;
+        b = temp;
+    }
 } // namespace 
+
+
+// * -------------------------
 
 
 int random_int (int left, int right) {

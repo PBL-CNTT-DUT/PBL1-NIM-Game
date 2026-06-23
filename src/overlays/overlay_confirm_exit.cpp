@@ -5,7 +5,7 @@
 #include "assets/game_assets.h"
 #include "render/theme.h"
 #include "overlays/overlay_common.h"
-#include "screens/screen_play.h"
+#include "screens/screens.h"
 #include "ui/ui.h"
 
 namespace {
@@ -15,12 +15,6 @@ namespace {
     Rectangle BTN_YES = {430, 420, 180, 70};
     Rectangle BTN_NO  = {670, 420, 180, 70};
 
-    const UIButtonStyle BTN_STYLE = {
-        Color{75, 110, 175, 255},
-        Color{95, 130, 195, 255},
-        Color{60, 90, 150, 255},
-        Color{20, 24, 36, 255}
-    };
 
     const char* _message_for_target(ExitTarget target) {
         switch (target) {
@@ -67,8 +61,7 @@ namespace {
     }
 }
 
-void overlay_confirm_exit_update(GameAppState& app, float dt) {
-    (void)dt;
+void overlay_confirm_exit_update(GameAppState& app) {
 
     if (ui_button_is_clicked(BTN_YES_ID, BTN_YES) || IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_Y)) {
         _confirm_exit(app);
@@ -85,7 +78,7 @@ void overlay_confirm_exit_draw(const GameAppState& app) {
     overlay_draw_backdrop(0.60f);
 
     Rectangle panel = {300, 200, 680, 360};
-    overlay_draw_panel(panel, Color{22, 26, 40, 245}, theme_accent_color());
+    overlay_draw_panel(panel, ui_color_overlay_panel_fill(), THEME_ACCENT_COLOR);
 
     const char* title = u8"XÁC NHẬN";
     const char* message = _message_for_target(app.exitTarget);
@@ -98,7 +91,7 @@ void overlay_confirm_exit_draw(const GameAppState& app) {
         1.0f,
         0.5f,
         0.1f,
-        theme_accent_color()
+        THEME_ACCENT_COLOR
     );
 
     ui_draw_text_in_rect(
@@ -109,30 +102,20 @@ void overlay_confirm_exit_draw(const GameAppState& app) {
         1.0f,
         0.5f,
         0.3f,
-        theme_text_color()
+        THEME_TEXT_COLOR
     );
 
     overlay_draw_button(
         BTN_YES_ID,
         BTN_YES,
         u8"CÓ",
-        g_assets.fonts.common,
-        28.0f,
-        BTN_STYLE,
-        DARKGRAY,
-        BLACK,
-        WHITE
+        28.0f
     );
 
     overlay_draw_button(
         BTN_NO_ID,
         BTN_NO,
         u8"KHÔNG",
-        g_assets.fonts.common,
-        28.0f,
-        BTN_STYLE,
-        DARKGRAY,
-        BLACK,
-        WHITE
+        28.0f
     );
 }

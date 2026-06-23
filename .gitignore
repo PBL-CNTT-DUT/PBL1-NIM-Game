@@ -1,7 +1,3 @@
-# Build artifacts
-# build/*.o
-# *.exe
-
 # IDE / Editor
 # .vscode
 .VSCodeCounter/
@@ -11,3 +7,6 @@
 
 # Test
 test/
+
+# File nen
+*.rar

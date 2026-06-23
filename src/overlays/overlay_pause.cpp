@@ -5,28 +5,39 @@
 #include "assets/game_assets.h"
 #include "render/theme.h"
 #include "overlays/overlay_common.h"
-#include "screens/screen_play.h"
+#include "screens/screens.h"
 #include "ui/ui.h"
 
 namespace {
 
     constexpr int BTN_RESUME_ID = 1;
     constexpr int BTN_MENU_ID = 2;
+    constexpr int BTN_SETTING_ID = 3;
 
 
     Rectangle BTN_RESUME = {490, 300, 300, 70};
     Rectangle BTN_MENU   = {490, 400, 300, 70};
+    Rectangle BTN_SETTING = {830, 205, 58, 58};
 
-    const UIButtonStyle BTN_STYLE = {
-        Color{75, 110, 175, 255},
-        Color{95, 130, 195, 255},
-        Color{60, 90, 150, 255},
-        Color{20, 24, 36, 255}
-    };
+    void _draw_icon_button(
+        int buttonId,
+        Rectangle rect,
+        const UIButtonStateTextures& textures,
+        const char* fallbackText,
+        float fallbackFontSize
+    ) {
+        const UIButtonState state = ui_button_get_state(buttonId, rect);
+        if (ui_button_has_any_textures(textures)) {
+            ui_button_draw_state_textures(rect, textures, state, false);
+            return;
+        }
+
+        overlay_draw_button(buttonId, rect, fallbackText, fallbackFontSize);
+    }
+
 }
 
-void overlay_pause_update(GameAppState& app, float dt) {
-    (void)dt;
+void overlay_pause_update(GameAppState& app) {
 
     if (ui_button_is_clicked(BTN_RESUME_ID, BTN_RESUME) || IsKeyPressed(KEY_R) || IsKeyPressed(KEY_ESCAPE)) {
         app.currentOverlay = APP_OVERLAY_NONE;
@@ -38,13 +49,20 @@ void overlay_pause_update(GameAppState& app, float dt) {
         
         return;
     }
+
+    if (ui_button_is_clicked(BTN_SETTING_ID, BTN_SETTING)) {
+        app.currentOverlay = APP_OVERLAY_NONE;
+        app.settingsReturnScreen = APP_SCREEN_PLAY;
+        app.currentScreen = APP_SCREEN_SETTINGS;
+        return;
+    }
 }
 
 void overlay_pause_draw() {
     overlay_draw_backdrop(0.55f);
 
     Rectangle panel = {360, 180, 560, 360};
-    overlay_draw_panel(panel, Color{22, 26, 40, 245}, theme_accent_color());
+    overlay_draw_panel(panel, ui_color_overlay_panel_fill(), THEME_ACCENT_COLOR);
 
     const char* textTitle = u8"TẠM DỪNG";
     ui_draw_text_in_rect(
@@ -55,61 +73,28 @@ void overlay_pause_draw() {
         1.0f,
         0.5f,
         0.1f,
-        theme_accent_color()
+        THEME_ACCENT_COLOR
     );
 
     overlay_draw_button(
         BTN_RESUME_ID,
         BTN_RESUME,
         u8"TIẾP TỤC",
-        g_assets.fonts.common,
-        26.0f,
-        BTN_STYLE,
-        DARKGRAY,
-        BLACK,
-        WHITE
+        26.0f
     );
 
     overlay_draw_button(
         BTN_MENU_ID,
         BTN_MENU,
         u8"VỀ MENU CHÍNH",
-        g_assets.fonts.common,
-        26.0f,
-        BTN_STYLE,
-        DARKGRAY,
-        BLACK,
-        WHITE
+        26.0f
     );
 
-    /*
-
-    
-
-    overlay_draw_button(
-    ui_button_draw(BTN_RESUME, BTN_STYLE, resumeState);
-    ui_button_draw_text(
-        BTN_RESUME,
-        u8"TIẾP TỤC",
-        g_assets.fonts.common,
-        26.0f,
-        resumeState,
-        DARKGRAY,
-        BLACK,
-        WHITE
+    _draw_icon_button(
+        BTN_SETTING_ID,
+        BTN_SETTING,
+        g_assets.buttons.setting,
+        u8"CÀI ĐẶT",
+        14.0f
     );
-
-    UIButtonState menuState = ui_button_get_state(BTN_MENU_ID, BTN_MENU);
-    ui_button_draw(BTN_MENU, BTN_STYLE, menuState);
-    ui_button_draw_text(
-        BTN_MENU,
-        u8"VỀ MENU CHÍNH",
-        g_assets.fonts.common,
-        26.0f,
-        menuState,
-        DARKGRAY,
-        BLACK,
-        WHITE
-    );
-    */
 }

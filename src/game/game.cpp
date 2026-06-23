@@ -2,12 +2,12 @@
 #include "common/random.h"
 
 
-void init_game (GameState& game, int pileCount, const MatchConfig& matchConfig, const GameSettings& settings) {
+void init_game (GameState& game, int pileCount, const MatchConfig& matchConfig, const GameSettings& settings, int startingTurn) {
     init_array(game.piles, pileCount);
 
     game.matchConfig = matchConfig;
     game.settings = settings;
-    game.currentTurn = 0;
+    game.currentTurn = startingTurn;
     game.totalStones = 0;
 
     for (int pileIndex = 0; pileIndex < game.piles.size; ++pileIndex) {
